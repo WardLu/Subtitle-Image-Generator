@@ -1,10 +1,100 @@
 /**
- * 图片字幕生成器 - 核心逻辑 V4.0
- * 优化：50/50分屏布局，Toast提示，水印居中，拖拽增强
+ * 图片字幕生成器 - 核心逻辑 V5.0
+ * 优化：i18n国际化支持，打赏功能，界面细节优化
  */
+
+const TRANS = {
+    zh: {
+        page_title: "影子对话长图生成器",
+        header_title: "🎬 影子对话长图生成器",
+        header_desc: "快速制作具有'切割感'背景的电影对话长图",
+        drop_zone_text: "拖拽图片至此 或 点击此处上传",
+        group_basic: "📁 基础设置",
+        btn_select_img: "选择图片",
+        btn_delete_img: "🗑️ 删除图片",
+        btn_save_img: "💾 保存图片",
+        group_subtitle: "💬 字幕设置",
+        hint_enter: "按回车键(Enter)换行",
+        placeholder_text: "在这里输入你的台词...",
+        label_font: "选择字体",
+        label_font_size: "字号",
+        label_font_color: "字体颜色 / 描边颜色",
+        label_bar_height: "字幕高度",
+        label_padding_x: "安全边距",
+        group_watermark: "📑 水印设置",
+        label_wm_enable: "启用水印",
+        label_wm_content: "水印内容",
+        label_wm_pos: "水印位置",
+        label_wm_opacity: "不透明度",
+        label_wm_size: "水印大小",
+        label_wm_color: "文字颜色",
+        pos_bottom_right: "右下角",
+        pos_bottom_left: "左下角",
+        pos_top_right: "右上角",
+        pos_top_left: "左上角",
+        pos_center: "居中",
+        footer_feedback: "反馈建议",
+        footer_donate: "打赏支持",
+        footer_wechat: "影子AI之旅",
+        modal_donate_title: "☕ 感谢支持开发者",
+        modal_donate_desc: "如果这个工具对你有帮助，欢迎打赏一杯咖啡",
+        donate_wechat: "微信支付",
+        donate_alipay: "支付宝",
+        toast_save_success: "图片保存成功！",
+        toast_save_fail: "保存失败，请先选择图片",
+        toast_invalid_file: "请上传有效的图片文件",
+        default_text: "欢迎关注微信公众号：影子AI之旅\nX：@Gollumgulu\nB端产品经理，洞察AI趋势，输出产品思考，带你一起玩转AI应用。",
+        default_wm: "公众号：影子AI之旅"
+    },
+    en: {
+        page_title: "Shadow Dialogue Long Image Generator",
+        header_title: "🎬 Shadow Dialogue Long Image Generator",
+        header_desc: "Create cinematic long images with 'cut-out' backgrounds",
+        drop_zone_text: "Drag & Drop Image Here or Click to Upload",
+        group_basic: "📁 Basic Settings",
+        btn_select_img: "Select Image",
+        btn_delete_img: "🗑️ Delete Image",
+        btn_save_img: "💾 Save Image",
+        group_subtitle: "💬 Subtitle Settings",
+        hint_enter: "Press Enter for new line",
+        placeholder_text: "Enter your subtitles here...",
+        label_font: "Font Family",
+        label_font_size: "Font Size",
+        label_font_color: "Font Color / Stroke",
+        label_bar_height: "Bar Height",
+        label_padding_x: "Safe Margin",
+        group_watermark: "📑 Watermark",
+        label_wm_enable: "Enable Watermark",
+        label_wm_content: "Content",
+        label_wm_pos: "Position",
+        label_wm_opacity: "Opacity",
+        label_wm_size: "Size",
+        label_wm_color: "Color",
+        pos_bottom_right: "Bottom Right",
+        pos_bottom_left: "Bottom Left",
+        pos_top_right: "Top Right",
+        pos_top_left: "Top Left",
+        pos_center: "Center",
+        footer_feedback: "Feedback",
+        footer_donate: "Donate",
+        footer_wechat: "影子AI之旅",
+        modal_donate_title: "☕ Support Developer",
+        modal_donate_desc: "If this tool helps you, consider buying me a coffee.",
+        donate_wechat: "WeChat Pay",
+        donate_alipay: "Alipay",
+        toast_save_success: "Image saved successfully!",
+        toast_save_fail: "Failed to save. Please select an image first.",
+        toast_invalid_file: "Please upload a valid image file.",
+        default_text: "Welcome to Shadow Dialogue Long Image Generator\nCreate movie-like subtitles easily.\nJust upload and type!",
+        default_wm: "Created by SubtitleGen"
+    }
+};
 
 class SubtitleGenerator {
     constructor() {
+        this.currentLang = 'zh'; // 默认中文
+
+        // Canvas & Core
         this.canvas = document.getElementById('subtitle-canvas');
         this.ctx = this.canvas.getContext('2d');
         this.dropZone = document.getElementById('drop-zone');
@@ -13,6 +103,12 @@ class SubtitleGenerator {
         this.resetBtn = document.getElementById('reset-btn');
         this.downloadBtn = document.getElementById('download-btn');
         this.toastContainer = document.getElementById('toast-container');
+
+        // UI Extras
+        this.langSelect = document.getElementById('lang-select');
+        this.donateTrigger = document.getElementById('donate-trigger');
+        this.donateModal = document.getElementById('donate-modal');
+        this.modalClose = document.getElementById('modal-close');
 
         // 字幕控制项
         this.controls = {
@@ -49,17 +145,23 @@ class SubtitleGenerator {
     }
 
     init() {
+        // 0. 初始化语言 (检测浏览器语言)
+        const browserLang = navigator.language || navigator.userLanguage;
+        if (!browserLang.startsWith('zh')) {
+            this.currentLang = 'en';
+        }
+        this.applyLanguage(this.currentLang);
+
         // 1. 设置默认内容
-        this.textInput.value = "欢迎关注微信公众号：影子AI之旅\nX：@Gollumgulu\nB端产品经理，洞察AI趋势，输出产品思考，带你一起玩转AI应用。";
-        this.wmControls.text.value = "公众号：影子AI之旅";
+        // 注意：applyLanguage 中会设置 placeholder，这里设置默认 value
+        this.textInput.value = this.t('default_text');
+        this.wmControls.text.value = this.t('default_wm');
 
         // 2. 图片上传管理
         this.imageInput.addEventListener('change', (e) => this.handleFile(e.target.files[0]));
-
-        // 区域点击上传
         this.dropZone.addEventListener('click', () => this.imageInput.click());
 
-        // 拖拽上传 (完善实现)
+        // 拖拽上传
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
             this.dropZone.addEventListener(eventName, (e) => {
                 e.preventDefault();
@@ -78,6 +180,26 @@ class SubtitleGenerator {
         // 3. 基础功能按钮
         this.resetBtn.addEventListener('click', () => this.resetImage());
         this.downloadBtn.addEventListener('click', () => this.download());
+
+        // 语言切换
+        this.langSelect.addEventListener('change', () => {
+            this.currentLang = this.langSelect.value;
+            this.applyLanguage(this.currentLang);
+            this.render(); // 重新渲染以更新可能画在 Canvas 上的文字(如下载时的水印)
+        });
+
+        // 打赏弹窗
+        this.donateTrigger.addEventListener('click', () => {
+            this.donateModal.classList.add('active');
+        });
+        this.modalClose.addEventListener('click', () => {
+            this.donateModal.classList.remove('active');
+        });
+        this.donateModal.addEventListener('click', (e) => {
+            if (e.target === this.donateModal) {
+                this.donateModal.classList.remove('active');
+            }
+        });
 
         // 4. 实时渲染绑定
         const refreshEvents = ['input', 'change'];
@@ -114,6 +236,31 @@ class SubtitleGenerator {
         this.updateValueDisplays();
     }
 
+    // --- i18n Helpers ---
+    t(key) {
+        return TRANS[this.currentLang][key] || key;
+    }
+
+    applyLanguage(lang) {
+        // 更新普通 DOM 文本
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (TRANS[lang][key]) {
+                el.innerText = TRANS[lang][key];
+            }
+        });
+
+        // 更新 Placeholder
+        this.textInput.placeholder = this.t('placeholder_text');
+
+        // 更新下拉选择器的值
+        this.langSelect.value = lang;
+
+        // 更新 <HTML> 标签
+        document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en-US';
+    }
+    // --------------------
+
     showToast(message) {
         const toast = document.createElement('div');
         toast.className = 'toast';
@@ -135,7 +282,7 @@ class SubtitleGenerator {
 
     handleFile(file) {
         if (!file || !file.type.startsWith('image/')) {
-            this.showToast('请上传有效的图片文件');
+            this.showToast(this.t('toast_invalid_file'));
             return;
         }
         const reader = new FileReader();
@@ -238,13 +385,11 @@ class SubtitleGenerator {
 
     download() {
         if (!this.originalImage) {
-            this.showToast('保存失败，请先选择图片');
+            this.showToast(this.t('toast_save_fail'));
             return;
         }
 
         // 使用 Data URL 方式下载
-        // 原因：Chrome 在 file:// 协议下会忽略 Blob URL 的 download 属性
-        // Data URL 则不受此限制，可确保所有浏览器正确保存为 .png 格式
         const dataUrl = this.canvas.toDataURL('image/png');
 
         const link = document.createElement('a');
@@ -254,13 +399,13 @@ class SubtitleGenerator {
 
         document.body.appendChild(link);
         link.click();
+        this.showToast(this.t('toast_save_success'));
 
         // 清理
         setTimeout(() => {
             document.body.removeChild(link);
         }, 100);
     }
-
 }
 
 window.onload = () => { new SubtitleGenerator(); };

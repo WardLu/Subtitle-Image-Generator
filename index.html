@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>图片字幕生成器 - 电影质感长图制作</title>
+    <title data-i18n="page_title">影子对话长图生成器</title>
     <!-- 引入浏览器小图标 -->
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
@@ -20,8 +20,16 @@
 <body>
     <div class="app-container">
         <header>
-            <h1>🎬 图片字幕生成器</h1>
-            <p>快速制作具有“切割感”背景的电影对话长图</p>
+            <!-- 语言切换 -->
+            <div class="lang-switch">
+                <span class="lang-icon">🌐</span>
+                <select id="lang-select" class="lang-select">
+                    <option value="zh">中文</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+            <h1 data-i18n="header_title">🎬 影子对话长图生成器</h1>
+            <p data-i18n="header_desc">快速制作具有“切割感”背景的电影对话长图</p>
         </header>
 
         <main>
@@ -30,7 +38,7 @@
                 <div class="canvas-wrapper">
                     <canvas id="subtitle-canvas"></canvas>
                     <div id="drop-zone" class="drop-zone">
-                        <span>拖拽图片至此 或 点击此处上传</span>
+                        <span data-i18n="drop_zone_text">拖拽图片至此 或 点击此处上传</span>
                     </div>
                 </div>
             </section>
@@ -39,14 +47,14 @@
             <aside class="control-panel">
                 <!-- 基础设置：三个按钮水平均分 -->
                 <div class="control-group basic-group">
-                    <h3>📁 基础设置</h3>
+                    <h3 data-i18n="group_basic">📁 基础设置</h3>
                     <div class="button-row">
                         <label class="file-label">
                             <input type="file" id="image-input" accept="image/*">
-                            <span>选择图片</span>
+                            <span data-i18n="btn_select_img">选择图片</span>
                         </label>
-                        <button id="reset-btn" class="secondary-btn">🗑️ 删除图片</button>
-                        <button id="download-btn" class="primary-btn">💾 保存图片</button>
+                        <button id="reset-btn" class="secondary-btn" data-i18n="btn_delete_img">🗑️ 删除图片</button>
+                        <button id="download-btn" class="primary-btn" data-i18n="btn_save_img">💾 保存图片</button>
                     </div>
                 </div>
 
@@ -54,13 +62,13 @@
                 <div class="settings-grid">
                     <!-- 左侧：字幕设置 -->
                     <div class="control-group subtitle-group">
-                        <h3>💬 字幕设置</h3>
-                        <p class="hint">按回车键(Enter)换行</p>
+                        <h3 data-i18n="group_subtitle">💬 字幕设置</h3>
+                        <p class="hint" data-i18n="hint_enter">按回车键(Enter)换行</p>
                         <textarea id="subtitle-text" placeholder="在这里输入你的台词..."></textarea>
 
                         <div class="style-sub-panel">
                             <div class="field">
-                                <label>选择字体</label>
+                                <label data-i18n="label_font">选择字体</label>
                                 <select id="font-family">
                                     <option value="'Noto Sans SC', sans-serif">中文 (Noto Sans SC)</option>
                                     <option value="'Roboto', sans-serif">英语 (Roboto)</option>
@@ -70,11 +78,12 @@
                                 </select>
                             </div>
                             <div class="field">
-                                <label>字号: <span id="font-size-val">20</span>px</label>
+                                <label><span data-i18n="label_font_size">字号</span>: <span
+                                        id="font-size-val">20</span>px</label>
                                 <input type="range" id="font-size" min="10" max="100" value="20">
                             </div>
                             <div class="field">
-                                <label>字体颜色 / 描边颜色</label>
+                                <label data-i18n="label_font_color">字体颜色 / 描边颜色</label>
                                 <div class="color-pickers">
                                     <input type="color" id="font-color" value="#ffffff" title="文字颜色">
                                     <input type="color" id="stroke-color" value="#000000" title="描边颜色">
@@ -82,11 +91,13 @@
                             </div>
                             <div class="row">
                                 <div class="field">
-                                    <label>字幕高度: <span id="bar-height-val">40</span>px</label>
+                                    <label><span data-i18n="label_bar_height">字幕高度</span>: <span
+                                            id="bar-height-val">40</span>px</label>
                                     <input type="range" id="bar-height" min="20" max="200" value="40">
                                 </div>
                                 <div class="field">
-                                    <label>安全边距: <span id="padding-x-val">20</span>px</label>
+                                    <label><span data-i18n="label_padding_x">安全边距</span>: <span
+                                            id="padding-x-val">20</span>px</label>
                                     <input type="range" id="padding-x" min="0" max="100" value="20">
                                 </div>
                             </div>
@@ -95,36 +106,38 @@
 
                     <!-- 右侧：水印设置 -->
                     <div class="control-group watermark-group">
-                        <h3>📑 水印设置</h3>
+                        <h3 data-i18n="group_watermark">📑 水印设置</h3>
                         <div class="field inline">
-                            <label for="wm-enable">启用水印</label>
+                            <label for="wm-enable" data-i18n="label_wm_enable">启用水印</label>
                             <input type="checkbox" id="wm-enable">
                         </div>
                         <div id="wm-controls" class="disabled-group">
                             <div class="field">
-                                <label>水印内容</label>
+                                <label data-i18n="label_wm_content">水印内容</label>
                                 <input type="text" id="wm-text" value="公众号：影子AI之旅">
                             </div>
                             <div class="field">
-                                <label>水印位置</label>
+                                <label data-i18n="label_wm_pos">水印位置</label>
                                 <select id="wm-pos">
-                                    <option value="bottom-right">右下角</option>
-                                    <option value="bottom-left">左下角</option>
-                                    <option value="top-right">右上角</option>
-                                    <option value="top-left">左上角</option>
-                                    <option value="center">居中</option>
+                                    <option value="bottom-right" data-i18n="pos_bottom_right">右下角</option>
+                                    <option value="bottom-left" data-i18n="pos_bottom_left">左下角</option>
+                                    <option value="top-right" data-i18n="pos_top_right">右上角</option>
+                                    <option value="top-left" data-i18n="pos_top_left">左上角</option>
+                                    <option value="center" data-i18n="pos_center">居中</option>
                                 </select>
                             </div>
                             <div class="field">
-                                <label>不透明度: <span id="wm-opacity-val">0.5</span></label>
+                                <label><span data-i18n="label_wm_opacity">不透明度</span>: <span
+                                        id="wm-opacity-val">0.5</span></label>
                                 <input type="range" id="wm-opacity" min="0" max="1" step="0.1" value="0.5">
                             </div>
                             <div class="field">
-                                <label>水印大小: <span id="wm-size-val">16</span>px</label>
+                                <label><span data-i18n="label_wm_size">水印大小</span>: <span
+                                        id="wm-size-val">16</span>px</label>
                                 <input type="range" id="wm-size" min="10" max="50" value="16">
                             </div>
                             <div class="field">
-                                <label>文字颜色</label>
+                                <label data-i18n="label_wm_color">文字颜色</label>
                                 <input type="color" id="wm-color" value="#ffffff">
                             </div>
                         </div>
@@ -132,6 +145,45 @@
                 </div>
             </aside>
         </main>
+
+        <footer class="app-footer">
+            <a href="mailto:wardlu@126.com" target="_blank">📧 <span data-i18n="footer_feedback">反馈建议</span></a>
+            <span id="donate-trigger">☕ <span data-i18n="footer_donate">打赏支持</span></span>
+            <span title="微信公众号">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
+                    style="vertical-align: middle; margin-right: 4px;">
+                    <path
+                        d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.047c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 0 1-.023-.156.49.49 0 0 1 .201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-6.656-6.088V8.89c-.135-.01-.27-.027-.406-.032zm-2.953 3.028c.506 0 .916.418.916.93s-.41.93-.916.93a.923.923 0 0 1-.916-.93c0-.512.41-.93.916-.93zm4.931 0c.506 0 .916.418.916.93s-.41.93-.916.93a.923.923 0 0 1-.916-.93c0-.512.41-.93.916-.93z" />
+                </svg>
+                <span data-i18n="footer_wechat">影子AI之旅</span>
+            </span>
+            <a href="https://x.com/Gollumgulu" target="_blank" title="X: @Gollumgulu">𝕏 @Gollumgulu</a>
+        </footer>
+    </div>
+
+    <!-- 打赏模态框 -->
+    <div class="modal-overlay" id="donate-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close">×</button>
+            <h3 data-i18n="modal_donate_title">☕ 感谢支持开发者</h3>
+            <p style="color:var(--text-secondary); margin-top:0.5rem; font-size:0.9rem;" data-i18n="modal_donate_desc">
+                如果这个工具对你有帮助，欢迎打赏一杯咖啡</p>
+
+            <div class="qr-container">
+                <div class="qr-item">
+                    <div class="qr-placeholder">
+                        <img src="assets/wechat-pay.jpg" alt="WeChat Pay">
+                    </div>
+                    <span data-i18n="donate_wechat">微信支付</span>
+                </div>
+                <div class="qr-item">
+                    <div class="qr-placeholder">
+                        <img src="assets/alipay.jpg" alt="Alipay">
+                    </div>
+                    <span data-i18n="donate_alipay">支付宝</span>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Toast 提示容器 -->
