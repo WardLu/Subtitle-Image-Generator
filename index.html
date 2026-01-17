@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="page_title">影子对话长图生成器</title>
+    <title data-i18n="page_title">影子字幕拼图</title>
     <!-- 引入浏览器小图标 -->
-    <link rel="icon"
-        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
-    <!-- 引入 Google Fonts 支持多语言 -->
+    <link rel="icon" type="image/svg+xml" href="public/brand_assets/shadow_subtitle_puzzle.svg">
+    <link rel="icon" type="image/png" href="public/brand_assets/shadow_subtitle_puzzle.png">
+    <!-- 引入 Google Fonts 支持多语言 + 特色字体 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&family=Roboto:wght@400;700&family=Noto+Sans+Thai:wght@400;700&family=Noto+Sans+Vietnamese:wght@400;700&family=Noto+Sans+Arabic:wght@400;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@400;600&family=Noto+Sans+SC:wght@400;700;900&family=Roboto:wght@400;700&family=Noto+Sans+Thai:wght@400;700&family=Noto+Sans+Vietnamese:wght@400;700&family=Noto+Sans+Arabic:wght@400;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -28,7 +28,7 @@
                     <option value="en">English</option>
                 </select>
             </div>
-            <h1 data-i18n="header_title">🎬 影子对话长图生成器</h1>
+            <h1 data-i18n="header_title"><img src="public/brand_assets/shadow_subtitle_puzzle.svg" alt="Logo" class="header-logo"> 影子字幕拼图</h1>
             <p data-i18n="header_desc">快速制作具有“切割感”背景的电影对话长图</p>
         </header>
 
@@ -147,16 +147,34 @@
         </main>
 
         <footer class="app-footer">
+            <a href="https://shadow.wang/" target="_blank" class="footer-link-with-logo">
+                <img src="public/brand_assets/shadow_portal_logo.svg" alt="Shadow.Nexus" class="footer-logo">
+                Shadow.Nexus
+            </a>
+            <span class="divider">|</span>
+            <a href="https://sbc.shadow.wang/" target="_blank" class="footer-link-with-logo">
+                <img src="public/brand_assets/shadow_card_logo.svg" alt="Shadow Card" class="footer-logo">
+                Shadow Card
+            </a>
+            <span class="divider">|</span>
             <a href="mailto:wardlu@126.com" target="_blank">📧 <span data-i18n="footer_feedback">反馈建议</span></a>
+            <span class="divider">|</span>
             <span id="donate-trigger">☕ <span data-i18n="footer_donate">打赏支持</span></span>
-            <span title="微信公众号">
+            <span class="divider">|</span>
+            <span class="wechat-qr-trigger" title="微信公众号">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
                     style="vertical-align: middle; margin-right: 4px;">
                     <path
                         d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.047c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 0 1-.023-.156.49.49 0 0 1 .201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-6.656-6.088V8.89c-.135-.01-.27-.027-.406-.032zm-2.953 3.028c.506 0 .916.418.916.93s-.41.93-.916.93a.923.923 0 0 1-.916-.93c0-.512.41-.93.916-.93zm4.931 0c.506 0 .916.418.916.93s-.41.93-.916.93a.923.923 0 0 1-.916-.93c0-.512.41-.93.916-.93z" />
                 </svg>
                 <span data-i18n="footer_wechat">影子AI之旅</span>
+                <!-- 二维码弹出层 -->
+                <div class="wechat-qr-popup">
+                    <img src="public/wxgzh.jpg" alt="微信公众号二维码">
+                    <p>扫码关注公众号</p>
+                </div>
             </span>
+            <span class="divider">|</span>
             <a href="https://x.com/Gollumgulu" target="_blank" title="X: @Gollumgulu">𝕏 @Gollumgulu</a>
         </footer>
     </div>

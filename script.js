@@ -1,12 +1,12 @@
 /**
- * 图片字幕生成器 - 核心逻辑 V5.0
+ * 影子字幕拼图 - 核心逻辑 V5.0
  * 优化：i18n国际化支持，打赏功能，界面细节优化
  */
 
 const TRANS = {
     zh: {
-        page_title: "影子对话长图生成器",
-        header_title: "🎬 影子对话长图生成器",
+        page_title: "影子字幕拼图",
+        header_title: "<img src='public/brand_assets/shadow_subtitle_puzzle.svg' alt='Logo' class='header-logo'> 影子字幕拼图",
         header_desc: "快速制作具有'切割感'背景的电影对话长图",
         drop_zone_text: "拖拽图片至此 或 点击此处上传",
         group_basic: "📁 基础设置",
@@ -47,8 +47,8 @@ const TRANS = {
         default_wm: "公众号：影子AI之旅"
     },
     en: {
-        page_title: "Shadow Dialogue Long Image Generator",
-        header_title: "🎬 Shadow Dialogue Long Image Generator",
+        page_title: "Shadow Subtitle Puzzle",
+        header_title: "<img src='public/brand_assets/shadow_subtitle_puzzle.svg' alt='Logo' class='header-logo'> Shadow Subtitle Puzzle",
         header_desc: "Create cinematic long images with 'cut-out' backgrounds",
         drop_zone_text: "Drag & Drop Image Here or Click to Upload",
         group_basic: "📁 Basic Settings",
@@ -85,7 +85,7 @@ const TRANS = {
         toast_save_success: "Image saved successfully!",
         toast_save_fail: "Failed to save. Please select an image first.",
         toast_invalid_file: "Please upload a valid image file.",
-        default_text: "Welcome to Shadow Dialogue Long Image Generator\nCreate movie-like subtitles easily.\nJust upload and type!",
+        default_text: "Welcome to Shadow Subtitle Puzzle\nCreate movie-like subtitles easily.\nJust upload and type!",
         default_wm: "Created by SubtitleGen"
     }
 };
@@ -246,7 +246,12 @@ class SubtitleGenerator {
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
             if (TRANS[lang][key]) {
-                el.innerText = TRANS[lang][key];
+                // 如果是 header_title，使用 innerHTML 渲染 HTML
+                if (key === 'header_title') {
+                    el.innerHTML = TRANS[lang][key];
+                } else {
+                    el.innerText = TRANS[lang][key];
+                }
             }
         });
 
